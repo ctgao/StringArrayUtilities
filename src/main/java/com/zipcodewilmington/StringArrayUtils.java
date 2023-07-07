@@ -125,9 +125,9 @@ public class StringArrayUtils {
     public static String[] removeValue(String[] array, String valueToRemove) {
         // previous code didn't work so I'm removing it and starting over again
         ArrayList<Integer> idxToRemove = new ArrayList<>();
-        for(int i = 1; i < array.length; i++){
+        for(int i = 0; i < array.length; i++){
             // if the previous element and current are the same, then remove that idx
-            if(array[i-1].equals(array[i])){
+            if(valueToRemove.equals(array[i])){
                 idxToRemove.add(i);
             }
         }
