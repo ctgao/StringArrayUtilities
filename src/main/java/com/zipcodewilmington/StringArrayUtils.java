@@ -123,9 +123,24 @@ public class StringArrayUtils {
      * @return array with identical contents excluding values of `value`
      */ // TODO
     public static String[] removeValue(String[] array, String valueToRemove) {
-        ArrayList<String> arrList = new ArrayList<String>(Arrays.asList(array));
-        arrList.remove(valueToRemove);
-        return (String[]) arrList.toArray();
+        // previous code didn't work so I'm removing it and starting over again
+        ArrayList<Integer> idxToRemove = new ArrayList<>();
+        for(int i = 1; i < array.length; i++){
+            // if the previous element and current are the same, then remove that idx
+            if(array[i-1].equals(array[i])){
+                idxToRemove.add(i);
+            }
+        }
+
+        String[] result = new String[array.length - idxToRemove.size()];
+        int resultIdx = 0;
+        for(int i = 0; i < array.length; i++){
+            if(!idxToRemove.contains(i)){
+                result[resultIdx] = array[i];
+                resultIdx++;
+            }
+        }
+        return result;
     }
 
     /**
@@ -133,20 +148,6 @@ public class StringArrayUtils {
      * @return array of Strings with consecutive duplicates removes
      */ // TODO
     public static String[] removeConsecutiveDuplicates(String[] array) {
-//        ArrayList<String> arrList = new ArrayList<String>(Arrays.asList(array));
-//        String temp = array[0];
-//        int idx = 1;
-//
-//        while(idx < arrList.size()){
-//            if(arrList.get(idx).equals(temp)){
-//                arrList.remove(idx);
-//            }
-//            // only increment when you do nothing otherwise arraylist might hate you
-//            else{
-//                idx++;
-//            }
-//        }
-//        return (String[]) arrList.toArray();
         // previous code didn't work so I'm removing it and starting over again
         ArrayList<Integer> idxToRemove = new ArrayList<>();
         for(int i = 1; i < array.length; i++){
@@ -172,23 +173,23 @@ public class StringArrayUtils {
      * @return array of Strings with each consecutive duplicate occurrence concatenated as a single string in an array of Strings
      */ // TODO
     public static String[] packConsecutiveDuplicates(String[] array) {
-//        ArrayList<String> arrList = new ArrayList<String>(Arrays.asList(array));
-//        String temp = array[0];
-//        int idx = 1;
-//
-//        while(idx < arrList.size()){
-//            if(arrList.get(idx).equals(temp)){
-//                arrList.remove(idx);
-//                arrList.set(idx - 1, temp + temp);
-//            }
-//            // only increment when you do nothing otherwise arraylist might hate you
-//            else{
-//                idx++;
-//            }
-//        }
-//        return (String[]) arrList.toArray();
-        // restarting from scratch since that methods doesn't really work
+        String[] result = removeConsecutiveDuplicates(array);
+        int arrayIdx = 0;
+        int startingIdx;
+
+        for(int resultIdx = 0; resultIdx < result.length; resultIdx++){
+            startingIdx = arrayIdx;
+            // find out how many consecutive characters
+            while(arrayIdx < array.length && array[arrayIdx].equals(result[resultIdx])){
+                arrayIdx++;
+            }
+            StringBuilder sb = new StringBuilder();
+            // use the number of consecutive characters to change the consecutive dupes
+            for(int i = 0; i < arrayIdx - startingIdx; i++){
+                sb.append(result[resultIdx]);
+            }
+            result[resultIdx] = sb.toString();
+        }
+        return result;
     }
-
-
 }
